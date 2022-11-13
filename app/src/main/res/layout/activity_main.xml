@@ -14,43 +14,67 @@
         android:layout_width="250dp"
         android:layout_height="250dp"
         android:layout_marginTop="100dp"
-        android:src="@drawable/fitnesskit" />
+        android:src="@drawable/fitnesskit"/>
 
     <TextView
-        android:id="@+id/tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="80dp"
-        android:text="Fitness App!"
-        android:textSize="30dp"/>
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginVertical="50dp"
+        android:fontFamily="@font/montserratalternatesblack"
+        android:text="Welcome to the Future of Fitness."
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="30dp" />
 
     <Button
         android:id="@+id/sign_up"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/roundcorners_bg_grey"
+        android:elevation="50dp"
         android:text="I'm New"
-        android:textColor="@color/white"
-        android:elevation="20dp"
-        android:background="@drawable/roundcorners"/>
-    <TextView
+        android:textAllCaps="false"
+        android:textColor="@color/white" />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Already a Member ?"
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="30dp"
         android:gravity="center"
-        android:textSize="18dp"
-        android:textStyle="bold"
-        android:textColor="@color/white"
-        android:layout_marginVertical="20dp"/>
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_weight="0.25"
+            android:background="@drawable/line"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppinsregular"
+            android:gravity="center"
+            android:text="Already a Member ?"
+            android:textColor="#41444E"
+            android:textSize="16dp" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_weight="0.25"
+            android:background="@drawable/line"/>
+    </LinearLayout>
 
     <Button
         android:id="@+id/sign_in"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="SIGN IN"
-        android:textColor="@color/white"
+        android:background="@drawable/roundcorners_bg_yellow"
         android:elevation="20dp"
-        android:background="@drawable/roundcorners_2"/>
+        android:text="SIGN IN"
+        android:textAllCaps="false"
+        android:textColor="#41444E" />
 
 </LinearLayout>
