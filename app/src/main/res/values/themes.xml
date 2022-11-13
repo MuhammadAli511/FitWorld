@@ -1,3 +1,4 @@
+<!--Light-->
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.FitWorld" parent="Theme.AppCompat.NoActionBar">

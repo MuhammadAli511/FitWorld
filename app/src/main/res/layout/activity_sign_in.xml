@@ -8,8 +8,6 @@
     android:background="@drawable/wallpaper_1"
     tools:context=".SignIn">
 
-
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -25,12 +23,12 @@
         </ImageView>
 
         <TextView
-            android:id="@+id/signin"
+            android:id="@+id/sign_up"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:text="Sign In"
+            android:text="Sign Up"
             android:textColor="#464752"
             android:textSize="20dp"
             android:fontFamily="@font/montserrat_medium"
