@@ -3,9 +3,11 @@ package com.example.i190417_i190468_i190260;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -21,6 +23,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.ByteArrayOutputStream;
+
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 
 public class SignUp extends AppCompatActivity {
     TextView sign_in;
@@ -77,13 +84,15 @@ public class SignUp extends AppCompatActivity {
             public void onClick(View view) {
                 if (!checkbox.isChecked()){
                     Toast.makeText(SignUp.this, "Please accept terms and conditions", Toast.LENGTH_LONG).show();
+                    progressDialog.dismiss();
                     return;
                 }
                 progressDialog.show();
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-                byte[] imageInByte = byteArrayOutputStream.toByteArray();
-                String image1 = Base64.encodeToString(imageInByte, Base64.DEFAULT);
+                Bitmap bmp = ((BitmapDrawable) profilePic.getDrawable()).getBitmap();
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byte[] byteArray = stream.toByteArray();
+                String image1 = Base64.encodeToString(byteArray, Base64.DEFAULT);
                 String name1 = name.getText().toString();
                 String email1 = email.getText().toString();
                 String pass1 = pass.getText().toString();
@@ -91,19 +100,46 @@ public class SignUp extends AppCompatActivity {
 
                 if (name1.equals("") || email1.equals("") || pass1.equals("") || confirm_pass1.equals("")){
                     Toast.makeText(SignUp.this, "Please fill all the fields", Toast.LENGTH_LONG).show();
+                    progressDialog.dismiss();
                     return;
                 }
                 mAuth.createUserWithEmailAndPassword(email1, pass1).addOnCompleteListener(task -> {
                     if (task.isSuccessful()){
                         Users user = new Users(name1, email1, pass1);
                         firebaseDatabase.getReference().child("Users").child(mAuth.getCurrentUser().getUid()).setValue(user);
-                        // TODO: Save image to MySQL by sending request here
+                        OkHttpClient client = new OkHttpClient();
+                        RequestBody body = new FormBody.Builder().add("email", email1).add("name", name1).add("image", image1).build();
+                        Request request = new Request.Builder().url("http://10.0.2.2:5000/postImage").post(body).build();
+                        client.newCall(request).enqueue(new okhttp3.Callback() {
+                            @Override
+                            public void onFailure(okhttp3.Call call, java.io.IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            @Override
+                            public void onResponse(okhttp3.Call call, okhttp3.Response response) throws java.io.IOException {
+                                if (response.isSuccessful()) {
+                                    String resp = response.body().string();
+                                    if (resp.contains("success")) {
+                                        Log.d("Response", resp);
+                                        progressDialog.dismiss();
+                                        response.close();
+                                        Intent intent = new Intent(SignUp.this, SignIn.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(intent);
+                                    } else {
+                                        Log.d("Response", resp);
+                                        progressDialog.dismiss();
+                                        response.close();
+                                        runOnUiThread(() -> Toast.makeText(SignUp.this, "Something went wrong", Toast.LENGTH_LONG).show());
+                                    }
+                                }
+                            }
+                        });
                     }else {
                         Toast.makeText(SignUp.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
-
-
             }
         });
     }
