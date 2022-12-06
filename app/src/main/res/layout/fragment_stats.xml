@@ -205,7 +205,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginVertical="5dp"
                             android:fontFamily="@font/montserrat_medium"
-                            android:text="2,154"
+                            android:text="0"
                             android:textColor="@color/black"
                             android:textSize="18dp"
                             android:textStyle="bold" />
@@ -247,7 +247,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginVertical="3dp"
                             android:fontFamily="@font/montserrat_medium"
-                            android:text="4.5"
+                            android:text="0"
                             android:textColor="@color/black"
                             android:textSize="18dp"
                             android:textStyle="bold" />
@@ -299,7 +299,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginVertical="3dp"
                             android:fontFamily="@font/montserrat_medium"
-                            android:text="14"
+                            android:text="0"
                             android:textColor="@color/black"
                             android:textSize="18dp"
                             android:textStyle="bold" />
@@ -338,11 +338,12 @@
                         </LinearLayout>
 
                         <TextView
+                            android:id="@+id/weeklyWaterIntakeText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginVertical="3dp"
                             android:fontFamily="@font/montserrat_medium"
-                            android:text="2100"
+                            android:text="0"
                             android:textColor="@color/black"
                             android:textSize="18dp"
                             android:textStyle="bold" />
@@ -401,9 +402,8 @@
                             android:layout_width="110dp"
                             android:layout_height="110dp"
                             app:cpb_background_progressbar_width="0dp"
-                            app:cpb_progress="1300"
+                            app:cpb_progress="0"
                             app:cpb_progress_direction="to_right"
-                            app:cpb_progress_max="2000"
                             app:cpb_progressbar_color="#A4DEFF"
                             app:cpb_background_progressbar_color="#808080"
                             app:cpb_progressbar_width="10dp"
@@ -425,7 +425,7 @@
                                 android:layout_marginHorizontal="15dp"
                                 android:fontFamily="@font/montserrat_bold"
                                 android:gravity="center"
-                                android:text="1300"
+                                android:text="0"
                                 android:textColor="@color/black"
                                 android:textSize="20dp" />
                             <TextView
@@ -471,9 +471,7 @@
                             android:layout_width="110dp"
                             android:layout_height="110dp"
                             app:cpb_background_progressbar_width="0dp"
-                            app:cpb_progress="30"
                             app:cpb_progress_direction="to_right"
-                            app:cpb_progress_max="100"
                             app:cpb_progressbar_color="#3f51b5"
                             app:cpb_progressbar_width="10dp"
                             app:cpb_round_border="true" />
@@ -493,7 +491,7 @@
                                 android:layout_marginHorizontal="15dp"
                                 android:fontFamily="@font/montserrat_bold"
                                 android:gravity="center"
-                                android:text="200"
+                                android:text="0"
                                 android:textColor="@color/black"
                                 android:textSize="25dp" />
                             <TextView
@@ -538,9 +536,7 @@
                             android:layout_width="110dp"
                             android:layout_height="110dp"
                             app:cpb_background_progressbar_width="0dp"
-                            app:cpb_progress="30"
                             app:cpb_progress_direction="to_right"
-                            app:cpb_progress_max="100"
                             app:cpb_progressbar_color="#3f51b5"
                             app:cpb_progressbar_width="10dp"
                             app:cpb_round_border="true" />
@@ -560,7 +556,7 @@
                                 android:layout_marginHorizontal="15dp"
                                 android:fontFamily="@font/montserrat_bold"
                                 android:gravity="center"
-                                android:text="200"
+                                android:text="0"
                                 android:textColor="@color/black"
                                 android:textSize="25dp" />
                             <TextView
