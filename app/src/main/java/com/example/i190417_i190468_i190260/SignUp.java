@@ -6,7 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Base64;
+import java.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -90,9 +90,12 @@ public class SignUp extends AppCompatActivity {
                 progressDialog.show();
                 Bitmap bmp = ((BitmapDrawable) profilePic.getDrawable()).getBitmap();
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                bmp.compress(Bitmap.CompressFormat.JPEG, 50, stream);
                 byte[] byteArray = stream.toByteArray();
-                String image1 = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                final String image1 = Base64.getEncoder().encodeToString(byteArray);
+
+
+
                 String name1 = name.getText().toString();
                 String email1 = email.getText().toString();
                 String pass1 = pass.getText().toString();

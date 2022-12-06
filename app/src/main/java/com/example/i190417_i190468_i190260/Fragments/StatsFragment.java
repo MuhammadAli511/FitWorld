@@ -1,6 +1,8 @@
 package com.example.i190417_i190468_i190260.Fragments;
 
 import android.app.AlertDialog;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -33,6 +35,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 
 import okhttp3.FormBody;
@@ -89,9 +92,9 @@ public class StatsFragment extends Fragment {
                             try {
                                 JSONObject jsonObject = new JSONObject(response.body().string());
                                 String image = jsonObject.getString("image");
-                                // converting the byte array to display the image
-                                byte[] decodedString = android.util.Base64.decode(image, android.util.Base64.DEFAULT);
-                                getActivity().runOnUiThread(() -> Glide.with(getContext()).load(decodedString).into(profilePicture));
+                                byte[] imageData = Base64.getDecoder().decode(image);
+                                Bitmap dppp = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+                                getActivity().runOnUiThread(() -> profilePicture.setImageBitmap(dppp));
                                 response.body().close();
                             } catch (JSONException e) {
                                 e.printStackTrace();
