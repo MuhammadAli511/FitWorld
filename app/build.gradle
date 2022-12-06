@@ -41,4 +41,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation 'com.squareup.okhttp3:okhttp:4.5.0'
     implementation 'com.onesignal:OneSignal:[4.0.0, 4.99.99]'
+    implementation 'com.mikhaellopez:circularprogressbar:3.1.0'
 }

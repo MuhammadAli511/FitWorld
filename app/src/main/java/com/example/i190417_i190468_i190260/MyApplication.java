@@ -3,6 +3,8 @@ package com.example.i190417_i190468_i190260;
 
 import android.app.Application;
 import android.content.Intent;
+
+import com.example.i190417_i190468_i190260.Fragments.StatsFragment;
 import com.onesignal.OSNotificationOpenedResult;
 import com.onesignal.OneSignal;
 
@@ -32,7 +34,7 @@ public class MyApplication extends Application {
         public void notificationOpened(OSNotificationOpenedResult result) {
             JSONObject data = result.getNotification().getAdditionalData();
             if (data != null) {
-                Intent intent = new Intent(application, All_Work_Outs.class);
+                Intent intent = new Intent(application, ExerciseMainScreen.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
                 application.startActivity(intent);
             }

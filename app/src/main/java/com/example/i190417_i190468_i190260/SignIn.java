@@ -70,7 +70,7 @@ public class SignIn extends AppCompatActivity {
                             String deviceIDStr = OneSignal.getDeviceState().getUserId();
                             firebaseDatabase.getReference().child("Users").child(mAuth.getCurrentUser().getUid()).child("deviceID").setValue(deviceIDStr);
 
-                            Intent intent = new Intent(SignIn.this, All_Work_Outs.class);
+                            Intent intent = new Intent(SignIn.this, ExerciseMainScreen.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
                             SignIn.this.finish();
@@ -91,7 +91,7 @@ public class SignIn extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (mAuth.getCurrentUser() != null){
-            Intent intent = new Intent(SignIn.this, All_Work_Outs.class);
+            Intent intent = new Intent(SignIn.this, ExerciseMainScreen.class);
             startActivity(intent);
         }
     }
