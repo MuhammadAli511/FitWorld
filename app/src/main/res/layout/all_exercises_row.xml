@@ -46,16 +46,34 @@
                     android:layout_marginRight="10dp"
                     android:src="@drawable/ic_baseline_timer_grey_24" />
 
-                <TextView
-                    android:id="@+id/exercise_time"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:fontFamily="@font/montserrat_regular"
-                    android:text="25 minutes"
-                    android:textColor="#5A5A5A"
-                    android:textSize="14dp"
-                    android:textStyle="bold" />
+
+                    android:layout_gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/exercise_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_regular"
+                        android:text="30"
+                        android:textColor="#5A5A5A"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_regular"
+                        android:text="seconds"
+                        android:textColor="#5A5A5A"
+                        android:textSize="14dp"
+                        android:layout_marginLeft="8dp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -69,15 +87,34 @@
                     android:layout_marginRight="10dp"
                     android:src="@drawable/ic_baseline_local_fire_grey__24" />
 
-                <TextView
-                    android:id="@+id/exercise_toughness"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat_regular"
-                    android:text="Medium"
-                    android:textColor="#5A5A5A"
-                    android:textSize="14dp"
-                    android:textStyle="bold" />
+                    android:layout_gravity="center_vertical"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:id="@+id/exercise_toughness"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_regular"
+                        android:text="10"
+                        android:textColor="#5A5A5A"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_regular"
+                        android:text="kCal"
+                        android:textColor="#5A5A5A"
+                        android:layout_marginLeft="8dp"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>
@@ -92,8 +129,8 @@
 
             <ImageView
                 android:id="@+id/exercise_image"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="105dp"
+                android:layout_height="105dp"
                 android:src="@drawable/upper_body" />
         </LinearLayout>
 

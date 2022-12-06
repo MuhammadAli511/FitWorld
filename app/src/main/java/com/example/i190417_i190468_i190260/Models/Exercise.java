@@ -1,46 +1,64 @@
 package com.example.i190417_i190468_i190260.Models;
 
-import android.media.Image;
-
 public class Exercise {
-    String title, time, toughness;
-    Image image;
+    String Name, Link, Description, Calories, Time, Image;
 
-    public Exercise(String title, String time, String toughness) {
-        this.title = title;
-        this.time = time;
-        this.toughness = toughness;
+    public Exercise() {}
+
+    public Exercise(String name, String link, String description, String calories, String time, String image) {
+        Name = name;
+        Link = link;
+        Description = description;
+        Calories = calories;
+        Time = time;
+        Image = image;
     }
 
-    public String getTitle() {
-        return title;
+    public String getImage() {
+        return Image;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setImage(String image) {
+        Image = image;
     }
 
     public String getTime() {
-        return time;
+        return Time;
     }
 
     public void setTime(String time) {
-        this.time = time;
+        Time = time;
     }
 
-    public String getToughness() {
-        return toughness;
+    public String getName() {
+        return Name;
     }
 
-    public void setToughness(String toughness) {
-        this.toughness = toughness;
+    public void setName(String name) {
+        Name = name;
     }
 
-    public Image getImage() {
-        return image;
+    public String getLink() {
+        return Link;
     }
 
-    public void setImage(Image image) {
-        this.image = image;
+    public void setLink(String link) {
+        Link = link;
+    }
+
+    public String getDescription() {
+        return Description;
+    }
+
+    public void setDescription(String description) {
+        Description = description;
+    }
+
+    public String getCalories() {
+        return Calories;
+    }
+
+    public void setCalories(String calories) {
+        Calories = calories;
     }
 }

@@ -191,6 +191,7 @@ public class StatsFragment extends Fragment {
                                 circularProgressBar.setProgressWithAnimation(newIntake, 1000L);
                                 waterValue.setText("");
                                 waterDialog.dismiss();
+                                getWeeklyWaterIntake();
                             }
                         }
                     });
@@ -230,7 +231,7 @@ public class StatsFragment extends Fragment {
                 }
             });
 
-            // get previous one week water intake achieved
+
             getWeeklyWaterIntake();
 
 
