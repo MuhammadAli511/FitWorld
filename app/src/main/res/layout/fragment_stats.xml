@@ -35,6 +35,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"
+            android:id="@+id/profilePicture"
             android:src="@drawable/default_pfp" />
     </RelativeLayout>
 
@@ -65,8 +66,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_extrabold"
-                    android:text="Usama Fiaz."
+                    android:text="User"
                     android:textColor="@color/black"
+                    android:id="@+id/userName"
                     android:textSize="35dp" />
             </LinearLayout>
 

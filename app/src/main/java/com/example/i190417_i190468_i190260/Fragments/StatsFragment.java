@@ -8,40 +8,45 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.bumptech.glide.Glide;
 import com.example.i190417_i190468_i190260.Adapters.ExerciseAdapter;
 import com.example.i190417_i190468_i190260.Models.Exercise;
 import com.example.i190417_i190468_i190260.R;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.List;
+
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 
 public class StatsFragment extends Fragment {
     public StatsFragment() {}
-    CalendarView calendarView;
-    TimePicker timeView1, timeView2;
-    TextView added_water_in_num;
-    String selectedDate, selectedTime1, selectedTime;
-    LinearLayout drink_reminder, reminder_exercise, add_water;
-    RecyclerView rv;
-    CircularProgressBar circularProgressBar;
-    EditText added_water, userinput_change_waterTarget;
-    TextInputLayout filledTextField, filledTextField2;
-    List<Exercise> ls,temp;
-    ExerciseAdapter adapter;
-    Button cancel1, save1, select_time, cancel2, select_exercise, cancel3, save2, add_save, cancel4, max_water_target, cancel5, save_change_waterTarget,cancel6;
-
-    String Dialoge_Exercise_Title="",Dialoge_Exercise_Time="",Dialoge_Exercise_Toughness="";
+    FirebaseDatabase database;
+    TextView userName;
+    FirebaseAuth mAuth;
+    ImageView profilePicture;
+    String email1 = "";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,18 +57,60 @@ public class StatsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        reminder_exercise = view.findViewById(R.id.reminder_exercise);
-        drink_reminder = view.findViewById(R.id.drink_reminder);
+        database = FirebaseDatabase.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        profilePicture = view.findViewById(R.id.profilePicture);
+        userName = view.findViewById(R.id.userName);
 
-        LayoutInflater factory = LayoutInflater.from(getActivity());
+        // Setting the name of the user
+        String userId = mAuth.getCurrentUser().getUid();
+        database.getReference().child("Users").child(userId).child("name").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                String name = task.getResult().getValue().toString();
+                userName.setText(name);
+            }
+        });
 
-        final View view1 = factory.inflate(R.layout.activity_dailytime, null);
-        timeView1 = view1.findViewById(R.id.timeView1);
-        cancel1 = view1.findViewById(R.id.cancel1);
-        save1 = view1.findViewById(R.id.save1);
+        // Getting the email of the user from the database to set profile picture
+        database.getReference().child("Users").child(userId).child("email").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                email1 = task.getResult().getValue().toString();
+                OkHttpClient client = new OkHttpClient();
+                Request request = new Request.Builder().url("http://10.0.2.2:5000/getImage?email=" + email1).addHeader("Connection", "close").build();
+                client.newCall(request).enqueue(new okhttp3.Callback() {
+                    @Override
+                    public void onFailure(okhttp3.Call call, IOException e) {
+                        e.printStackTrace();
+                    }
 
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity()).setView(view1);
-        AlertDialog dialog1 = builder1.create();
+                    @Override
+                    public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            try {
+                                JSONObject jsonObject = new JSONObject(response.body().string());
+                                String image = jsonObject.getString("image");
+                                // converting the byte array to display the image
+                                byte[] decodedString = android.util.Base64.decode(image, android.util.Base64.DEFAULT);
+                                getActivity().runOnUiThread(() -> Glide.with(getContext()).load(decodedString).into(profilePicture));
+                                response.body().close();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    }
+                });
+            }
+        });
+
+
+
+
+
+
+
+
+
 
 
     }
