@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -11,6 +13,7 @@ public class WorkoutDetails extends AppCompatActivity {
 
     TextView exerciseName, exerciseDescription, exerciseCalories, exerciseTime, exerciseLink;
     VideoView simpleVideoView;
+    ImageView backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +43,14 @@ public class WorkoutDetails extends AppCompatActivity {
         simpleVideoView = findViewById(R.id.simpleVideoView);
         simpleVideoView.setVideoPath(exerciseVideoStr);
         simpleVideoView.start();
+
+        backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
 
     }

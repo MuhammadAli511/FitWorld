@@ -15,20 +15,7 @@
         android:layout_gravity="center"
         android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentStart="true"
-            android:background="@drawable/squarecorners_bg_grey"
-            android:gravity="center">
 
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginLeft="12dp"
-                android:elevation="10dp"
-                android:src="@drawable/ic_baseline_arrow_back_ios_24" />
-        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
