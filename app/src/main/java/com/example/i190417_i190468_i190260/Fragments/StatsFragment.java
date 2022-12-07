@@ -7,6 +7,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,6 +35,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
+import com.onesignal.OneSignal;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -122,9 +125,22 @@ public class StatsFragment extends Fragment {
 
         // Water Intake
         {
+            CircularProgressBar circularProgressBar = getView().findViewById(R.id.water_progressBar);
+
+            // Getting the water intake of the user from the database
+            String todayDate = java.time.LocalDate.now().toString();
+            database.getReference().child("WaterIntake").child(userId).child(todayDate).child("waterIntakeAchieved").get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    if (task.getResult().getValue() != null) {
+                        String waterIntake = task.getResult().getValue().toString();
+                        Float waterIntakeFloat = Float.parseFloat(waterIntake);
+                        Log.d("waterIntake", waterIntake);
+                        circularProgressBar.setProgressWithAnimation(waterIntakeFloat, 1000L);
+                    }
+                }
+            });
 
             // Check if user has set a daily water intake
-            CircularProgressBar circularProgressBar = getView().findViewById(R.id.water_progressBar);
             String date = java.time.LocalDate.now().toString();
             database.getReference().child("WaterIntake").child(userId).child(date).child("waterIntakeTarget").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                 @Override
@@ -191,6 +207,7 @@ public class StatsFragment extends Fragment {
                                 circularProgressBar.setProgressWithAnimation(newIntake, 1000L);
                                 waterValue.setText("");
                                 waterDialog.dismiss();
+                                checkForAchievements();
                                 getWeeklyWaterIntake();
                             }
                         }
@@ -241,6 +258,32 @@ public class StatsFragment extends Fragment {
 
     }
 
+    public void checkForAchievements(){
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String date = java.time.LocalDate.now().toString();
+        database.getReference().child("WaterIntake").child(userId).child(date).child("waterIntakeAchieved").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()){
+                    String intake = task.getResult().getValue().toString();
+                    float intakeFloat = Float.parseFloat(intake);
+                    String targetValue = dailyWaterIntakeTarget.getText().toString();
+                    float targetFloat = Float.parseFloat(targetValue);
+                    if (intakeFloat >= targetFloat){
+                        Log.d("intake", "intake achieved");
+                        String deviceID = OneSignal.getDeviceState().getUserId();
+                        try {
+                            OneSignal.postNotification(new JSONObject("{'contents': {'en':'You have achieved your daily water intake target'}, 'include_player_ids': ['" + deviceID + "']}"), null);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        });
+
+    }
+
 
     public void getWeeklyWaterIntake(){
         final List<String>[] waterIntakeAchievedList = new List[]{new ArrayList<>()};
@@ -252,6 +295,7 @@ public class StatsFragment extends Fragment {
                     database.getReference().child("WaterIntake").child(userId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DataSnapshot> task) {
+
                             if (task.isSuccessful()){
                                 List<String> dateList = new ArrayList<>();
                                 for (int i = 0; i < 7; i++){
@@ -260,9 +304,13 @@ public class StatsFragment extends Fragment {
                                 }
                                 for (DataSnapshot snapshot : task.getResult().getChildren()){
                                     String date = snapshot.getKey();
-                                    String waterIntakeTarget = snapshot.child("waterIntakeAchieved").getValue().toString();
-                                    if (dateList.contains(date)){
-                                        waterIntakeAchievedList[0].add(waterIntakeTarget);
+                                    if (snapshot.child("waterIntakeAchieved").getValue() == null){
+                                        waterIntakeAchievedList[0].add("0");
+                                    } else {
+                                        String waterIntakeTarget = snapshot.child("waterIntakeAchieved").getValue().toString();
+                                        if (dateList.contains(date)){
+                                            waterIntakeAchievedList[0].add(waterIntakeTarget);
+                                        }
                                     }
                                 }
                                 // take sum of waterIntakeAchievedList
