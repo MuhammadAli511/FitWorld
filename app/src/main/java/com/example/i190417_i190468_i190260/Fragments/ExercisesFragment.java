@@ -64,7 +64,6 @@ public class ExercisesFragment extends Fragment {
                 exercisesList.clear();
                 if(searchText.isEmpty()){
                     exercisesList.addAll(tempList);
-                    Toast.makeText(getActivity(), "Empty", Toast.LENGTH_LONG).show();
                 }
                 else{
                     exercisesList.clear();

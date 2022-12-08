@@ -201,6 +201,7 @@
                         </LinearLayout>
 
                         <TextView
+                            android:id="@+id/calVal"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginVertical="5dp"
@@ -243,6 +244,7 @@
                         </LinearLayout>
 
                         <TextView
+                            android:id="@+id/hoursVal"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginVertical="3dp"
@@ -295,6 +297,7 @@
                         </LinearLayout>
 
                         <TextView
+                            android:id="@+id/exerciseNumber"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginVertical="3dp"
@@ -453,137 +456,7 @@
                         android:textSize="10dp"
                         android:textStyle="bold" />
                 </LinearLayout>
-                <LinearLayout
-                    android:layout_width="100dp"
-                    android:layout_height="125dp"
-                    android:gravity="center"
-                    android:layout_marginRight="10dp"
-                    android:orientation="vertical">
 
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:gravity="center_horizontal">
-
-                        <com.mikhaellopez.circularprogressbar.CircularProgressBar
-                            android:id="@+id/circularProgressBar2"
-                            android:layout_width="110dp"
-                            android:layout_height="110dp"
-                            app:cpb_background_progressbar_width="0dp"
-                            app:cpb_progress_direction="to_right"
-                            app:cpb_progressbar_color="#3f51b5"
-                            app:cpb_progressbar_width="10dp"
-                            app:cpb_round_border="true" />
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:gravity="center"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerHorizontal="true"
-                                android:layout_centerVertical="true"
-                                android:layout_marginHorizontal="15dp"
-                                android:fontFamily="@font/montserrat_bold"
-                                android:gravity="center"
-                                android:text="0"
-                                android:textColor="@color/black"
-                                android:textSize="25dp" />
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerInParent="true"
-                                android:layout_marginHorizontal="15dp"
-                                android:fontFamily="@font/montserrat_bold"
-                                android:gravity="center"
-                                android:text="ML"
-                                android:textColor="@color/black"
-                                android:textSize="15dp" />
-                        </LinearLayout>
-                    </RelativeLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="10dp"
-                        android:fontFamily="@font/montserrat_regular"
-                        android:gravity="center_horizontal"
-                        android:text="Add Water"
-                        android:textColor="#5A5A5A"
-                        android:textSize="10dp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="100dp"
-                    android:layout_height="125dp"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:gravity="center_horizontal">
-
-                        <com.mikhaellopez.circularprogressbar.CircularProgressBar
-                            android:id="@+id/circularProgressBar3"
-                            android:layout_width="110dp"
-                            android:layout_height="110dp"
-                            app:cpb_background_progressbar_width="0dp"
-                            app:cpb_progress_direction="to_right"
-                            app:cpb_progressbar_color="#3f51b5"
-                            app:cpb_progressbar_width="10dp"
-                            app:cpb_round_border="true" />
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:gravity="center"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerHorizontal="true"
-                                android:layout_centerVertical="true"
-                                android:layout_marginHorizontal="15dp"
-                                android:fontFamily="@font/montserrat_bold"
-                                android:gravity="center"
-                                android:text="0"
-                                android:textColor="@color/black"
-                                android:textSize="25dp" />
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerInParent="true"
-                                android:layout_marginHorizontal="15dp"
-                                android:fontFamily="@font/montserrat_bold"
-                                android:gravity="center"
-                                android:text="ML"
-                                android:textColor="@color/black"
-                                android:textSize="15dp" />
-                        </LinearLayout>
-                    </RelativeLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="10dp"
-                        android:fontFamily="@font/montserrat_regular"
-                        android:gravity="center_horizontal"
-                        android:text="Add Water"
-                        android:textColor="#5A5A5A"
-                        android:textSize="10dp"
-                        android:textStyle="bold" />
-                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

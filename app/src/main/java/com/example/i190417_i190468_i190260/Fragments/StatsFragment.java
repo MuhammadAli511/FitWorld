@@ -1,8 +1,13 @@
 package com.example.i190417_i190468_i190260.Fragments;
 
+
+
 import android.app.AlertDialog;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -44,7 +49,9 @@ import org.w3c.dom.Text;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -60,7 +67,7 @@ public class StatsFragment extends Fragment {
     FirebaseAuth mAuth;
     ImageView profilePicture;
     String email1 = "";
-    TextView dailyWaterIntakeTarget, weeklyWaterIntakeText;
+    TextView dailyWaterIntakeTarget, weeklyWaterIntakeText, exerciseNumber, hoursVal, calVal;
     Button cancelWater, addWater, waterIntakeTargetSave, waterIntakeTargetCancel, max_water_targetButton;
     EditText waterValue, waterIntakeTargetText;
     TextInputLayout filledTextField, filledTextField2;
@@ -75,11 +82,24 @@ public class StatsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
+
+
+
+
+
+
+
+
         database = FirebaseDatabase.getInstance();
         mAuth = FirebaseAuth.getInstance();
         profilePicture = view.findViewById(R.id.profilePicture);
         userName = view.findViewById(R.id.userName);
         dailyWaterIntakeTarget = view.findViewById(R.id.added_water_in_num);
+        exerciseNumber = view.findViewById(R.id.exerciseNumber);
+        hoursVal = view.findViewById(R.id.hoursVal);
+        calVal = view.findViewById(R.id.calVal);
         LayoutInflater factory = LayoutInflater.from(getActivity());
 
         // Setting the name of the user
@@ -122,6 +142,63 @@ public class StatsFragment extends Fragment {
                 });
             }
         });
+
+        // Exercise Stats
+        {
+            List<Exercise> exerciseList = new ArrayList<>();
+            database.getReference().child("Workouts").child(userId).get().addOnCompleteListener(task -> {
+                if(task.isSuccessful()){
+                    DataSnapshot snapshot = task.getResult();
+                    for(DataSnapshot ds : snapshot.getChildren()){
+                        Exercise exercise = ds.getValue(Exercise.class);
+                        exerciseList.add(exercise);
+                    }
+                    List<String> dateList = new ArrayList<>();
+                    for (int i = 0; i < 7; i++){
+                        String date = java.time.LocalDate.now().minusDays(i).toString();
+                        dateList.add(date);
+                    }
+                    // Get weekly number of exercises
+                    int weeklyExercises = 0;
+                    for (Exercise exercise : exerciseList){
+                        if (dateList.contains(exercise.getTimestamp())){
+                            weeklyExercises++;
+                        }
+                    }
+                    exerciseNumber.setText(String.valueOf(weeklyExercises));
+                    // Get weekly exercise time
+                    int weeklyExerciseTime = 0;
+                    for (Exercise exercise : exerciseList){
+                        if (dateList.contains(exercise.getTimestamp())){
+                            String secondsVal = exercise.getTime();
+                            String secondsVal1 = secondsVal.replace(" seconds", "");
+                            int seconds = Integer.parseInt(secondsVal1);
+                            weeklyExerciseTime += seconds;
+                        }
+                    }
+                    Float minutes = Float.valueOf(weeklyExerciseTime / 60);
+                    Float hours = minutes / 60;
+                    hoursVal.setText(String.format("%.2f", hours));
+
+                    // Get weekly calories burned
+                    int weeklyCaloriesBurned = 0;
+                    for (Exercise exercise : exerciseList){
+                        if (dateList.contains(exercise.getTimestamp())){
+                            String caloriesVal = exercise.getCalories();
+                            String caloriesVal1 = caloriesVal.replace(" kCal", "");
+                            int calories = Integer.parseInt(caloriesVal1);
+                            weeklyCaloriesBurned += calories;
+                        }
+                    }
+                    calVal.setText(String.valueOf(weeklyCaloriesBurned));
+
+
+
+
+                }
+            });
+
+        }
 
         // Water Intake
         {
@@ -253,9 +330,6 @@ public class StatsFragment extends Fragment {
 
 
         }
-
-
-
     }
 
     public void checkForAchievements(){
@@ -267,17 +341,30 @@ public class StatsFragment extends Fragment {
                 if (task.isSuccessful()){
                     String intake = task.getResult().getValue().toString();
                     float intakeFloat = Float.parseFloat(intake);
-                    String targetValue = dailyWaterIntakeTarget.getText().toString();
-                    float targetFloat = Float.parseFloat(targetValue);
-                    if (intakeFloat >= targetFloat){
-                        Log.d("intake", "intake achieved");
-                        String deviceID = OneSignal.getDeviceState().getUserId();
-                        try {
-                            OneSignal.postNotification(new JSONObject("{'contents': {'en':'You have achieved your daily water intake target'}, 'include_player_ids': ['" + deviceID + "']}"), null);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                    // get the target
+                    database.getReference().child("WaterIntake").child(userId).child(date).child("waterIntakeTarget").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            if (task.isSuccessful()){
+                                String target = task.getResult().getValue().toString();
+                                float targetFloat = Float.parseFloat(target);
+                                if (intakeFloat >= targetFloat){
+                                    Log.d("intake", String.valueOf(intakeFloat));
+                                    Log.d("target", String.valueOf(targetFloat));
+                                    if (intakeFloat >= targetFloat){
+                                        Log.d("intake", "intake achieved");
+                                        String deviceID = OneSignal.getDeviceState().getUserId();
+                                        try {
+                                            OneSignal.postNotification(new JSONObject("{'contents': {'en':'You have achieved your daily water intake target'}, 'include_player_ids': ['" + deviceID + "']}"), null);
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+                            }
                         }
-                    }
+                    });
+
                 }
             }
         });
@@ -292,41 +379,35 @@ public class StatsFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()){
-                    database.getReference().child("WaterIntake").child(userId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DataSnapshot> task) {
-
-                            if (task.isSuccessful()){
-                                List<String> dateList = new ArrayList<>();
-                                for (int i = 0; i < 7; i++){
-                                    String date = java.time.LocalDate.now().minusDays(i).toString();
-                                    dateList.add(date);
-                                }
-                                for (DataSnapshot snapshot : task.getResult().getChildren()){
-                                    String date = snapshot.getKey();
-                                    if (snapshot.child("waterIntakeAchieved").getValue() == null){
-                                        waterIntakeAchievedList[0].add("0");
-                                    } else {
-                                        String waterIntakeTarget = snapshot.child("waterIntakeAchieved").getValue().toString();
-                                        if (dateList.contains(date)){
-                                            waterIntakeAchievedList[0].add(waterIntakeTarget);
-                                        }
-                                    }
-                                }
-                                // take sum of waterIntakeAchievedList
-                                float sum = 0;
-                                for (String s : waterIntakeAchievedList[0]){
-                                    sum += Float.parseFloat(s);
-                                }
-                                weeklyWaterIntakeText = getView().findViewById(R.id.weeklyWaterIntakeText);
-                                weeklyWaterIntakeText.setText(String.valueOf(sum));
-
+                    List<String> dateList = new ArrayList<>();
+                    for (int i = 0; i < 7; i++){
+                        String date = java.time.LocalDate.now().minusDays(i).toString();
+                        dateList.add(date);
+                    }
+                    for (DataSnapshot snapshot : task.getResult().getChildren()){
+                        String date = snapshot.getKey();
+                        if (snapshot.child("waterIntakeAchieved").getValue() == null){
+                            waterIntakeAchievedList[0].add("0");
+                        } else {
+                            String waterIntakeTarget = snapshot.child("waterIntakeAchieved").getValue().toString();
+                            if (dateList.contains(date)){
+                                waterIntakeAchievedList[0].add(waterIntakeTarget);
                             }
                         }
-                    });
+                    }
+                    float sum = 0;
+                    for (String s : waterIntakeAchievedList[0]){
+                        sum += Float.parseFloat(s);
+                    }
+                    weeklyWaterIntakeText = getView().findViewById(R.id.weeklyWaterIntakeText);
+                    weeklyWaterIntakeText.setText(String.valueOf(sum));
+
                 }
             }
         });
-
     }
+
+
+
+
 }

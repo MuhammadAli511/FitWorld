@@ -1,7 +1,11 @@
 package com.example.i190417_i190468_i190260;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -62,37 +66,41 @@ public class SignIn extends AppCompatActivity {
                     progressDialog.dismiss();
                     return;
                 }
-                mAuth.signInWithEmailAndPassword(email1, pass1).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()){
-                            progressDialog.dismiss();
-                            String deviceIDStr = OneSignal.getDeviceState().getUserId();
-                            firebaseDatabase.getReference().child("Users").child(mAuth.getCurrentUser().getUid()).child("deviceID").setValue(deviceIDStr);
+                ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+                if (!networkInfo.isConnected()) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(SignIn.this);
+                    builder.setTitle("No Internet Connection");
+                    builder.setMessage("Please check your internet connection and try again");
+                    builder.setPositiveButton("OK", null);
+                    builder.show();
+                }
+                else {
+                    mAuth.signInWithEmailAndPassword(email1, pass1).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()){
+                                progressDialog.dismiss();
+                                String deviceIDStr = OneSignal.getDeviceState().getUserId();
+                                firebaseDatabase.getReference().child("Users").child(mAuth.getCurrentUser().getUid()).child("deviceID").setValue(deviceIDStr);
 
-                            Intent intent = new Intent(SignIn.this, ExerciseMainScreen.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                            SignIn.this.finish();
+                                Intent intent = new Intent(SignIn.this, ExerciseMainScreen.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                                SignIn.this.finish();
+                            }
+                            else{
+                                progressDialog.dismiss();
+                                Toast.makeText(SignIn.this, "Login Failed", Toast.LENGTH_LONG).show();
+                            }
                         }
-                        else{
-                            progressDialog.dismiss();
-                            Toast.makeText(SignIn.this, "Login Failed", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
+                    });
+                }
 
             }
         });
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (mAuth.getCurrentUser() != null){
-            Intent intent = new Intent(SignIn.this, ExerciseMainScreen.class);
-            startActivity(intent);
-        }
-    }
+
 }

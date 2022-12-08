@@ -1,17 +1,25 @@
 package com.example.i190417_i190468_i190260.Models;
 
 public class Exercise {
-    String Name, Link, Description, Calories, Time, Image;
+    String Name, Link, Description, Calories, Time, Image, Timestamp;
 
     public Exercise() {}
 
-    public Exercise(String name, String link, String description, String calories, String time, String image) {
-        Name = name;
-        Link = link;
-        Description = description;
-        Calories = calories;
-        Time = time;
-        Image = image;
+    public Exercise(String Name, String Link, String Description, String Calories, String Time, String Image) {
+        this.Name = Name;
+        this.Link = Link;
+        this.Description = Description;
+        this.Calories = Calories;
+        this.Time = Time;
+        this.Image = Image;
+    }
+
+    public String getTimestamp() {
+        return Timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        Timestamp = timestamp;
     }
 
     public String getImage() {
