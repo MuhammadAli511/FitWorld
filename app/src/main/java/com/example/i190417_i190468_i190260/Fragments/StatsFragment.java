@@ -4,6 +4,7 @@ package com.example.i190417_i190468_i190260.Fragments;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
@@ -33,6 +34,7 @@ import com.bumptech.glide.Glide;
 import com.example.i190417_i190468_i190260.Adapters.ExerciseAdapter;
 import com.example.i190417_i190468_i190260.Models.Exercise;
 import com.example.i190417_i190468_i190260.R;
+import com.example.i190417_i190468_i190260.SignIn;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
@@ -68,7 +70,7 @@ public class StatsFragment extends Fragment {
     ImageView profilePicture;
     String email1 = "";
     TextView dailyWaterIntakeTarget, weeklyWaterIntakeText, exerciseNumber, hoursVal, calVal;
-    Button cancelWater, addWater, waterIntakeTargetSave, waterIntakeTargetCancel, max_water_targetButton;
+    Button cancelWater, addWater, waterIntakeTargetSave, waterIntakeTargetCancel, max_water_targetButton,tryAgainButton;
     EditText waterValue, waterIntakeTargetText;
     TextInputLayout filledTextField, filledTextField2;
     LinearLayout addWaterLayout;
@@ -83,12 +85,24 @@ public class StatsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
-
-
-
-
-
+        LayoutInflater factory = LayoutInflater.from(getActivity());
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if (networkInfo == null) {
+            View tryagain = factory.inflate(R.layout.tryagain, null);
+            tryAgainButton = tryagain.findViewById(R.id.tryAgainButton);
+            AlertDialog.Builder trybuilder = new AlertDialog.Builder(getActivity()).setView(tryagain);
+            AlertDialog trydialog = trybuilder.create();
+            trydialog.show();
+            tryAgainButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    trydialog.dismiss();
+                    Intent intent = new Intent(getActivity(), SignIn.class);
+                    startActivity(intent);
+                }
+            });
+        }
 
 
 
@@ -100,7 +114,7 @@ public class StatsFragment extends Fragment {
         exerciseNumber = view.findViewById(R.id.exerciseNumber);
         hoursVal = view.findViewById(R.id.hoursVal);
         calVal = view.findViewById(R.id.calVal);
-        LayoutInflater factory = LayoutInflater.from(getActivity());
+
 
         // Setting the name of the user
         String userId = mAuth.getCurrentUser().getUid();
@@ -129,9 +143,11 @@ public class StatsFragment extends Fragment {
                             try {
                                 JSONObject jsonObject = new JSONObject(response.body().string());
                                 String image = jsonObject.getString("image");
-                                byte[] imageData = Base64.getDecoder().decode(image);
-                                Bitmap dppp = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
-                                getActivity().runOnUiThread(() -> profilePicture.setImageBitmap(dppp));
+                                if (image != null){
+                                    byte[] imageData = Base64.getDecoder().decode(image);
+                                    Bitmap dppp = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+                                    getActivity().runOnUiThread(() -> profilePicture.setImageBitmap(dppp));
+                                }
                                 response.body().close();
                             } catch (JSONException e) {
                                 e.printStackTrace();

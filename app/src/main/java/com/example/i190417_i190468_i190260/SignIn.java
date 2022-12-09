@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -68,12 +70,30 @@ public class SignIn extends AppCompatActivity {
                 }
                 ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-                if (!networkInfo.isConnected()) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(SignIn.this);
-                    builder.setTitle("No Internet Connection");
-                    builder.setMessage("Please check your internet connection and try again");
-                    builder.setPositiveButton("OK", null);
-                    builder.show();
+                if (networkInfo == null) {
+                    MyDBHelper myDBHelper = new MyDBHelper(SignIn.this);
+                    SQLiteDatabase sqLiteDatabase = myDBHelper.getReadableDatabase();
+                    String[] projection = {MyContract.Users._ID, MyContract.Users._EMAIL, MyContract.Users._PASS, MyContract.Users._NAME};
+                    Cursor cursor = sqLiteDatabase.query(MyContract.Users.TABLE_NAME, projection, null, null, null, null, null);
+                    if (cursor.getCount() == 0) {
+                        Toast.makeText(SignIn.this, "No user found", Toast.LENGTH_LONG).show();
+                        progressDialog.dismiss();
+                        return;
+                    }
+                    while (cursor.moveToNext()) {
+                        String email2 = cursor.getString(1);
+                        String pass2 = cursor.getString(2);
+                        if (email1.equals(email2) && pass1.equals(pass2)) {
+                            String name = cursor.getString(3);
+                            Intent intent = new Intent(SignIn.this, ExerciseMainScreen.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.putExtra("name", name);
+                            startActivity(intent);
+                            SignIn.this.finish();
+                            progressDialog.dismiss();
+                            return;
+                        }
+                    }
                 }
                 else {
                     mAuth.signInWithEmailAndPassword(email1, pass1).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
