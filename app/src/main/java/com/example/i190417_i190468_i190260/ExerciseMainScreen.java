@@ -33,8 +33,8 @@ public class ExerciseMainScreen extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_outline_home_24);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_baseline_fitness_center_24);
-        tabLayout.getTabAt(2).setIcon(R.drawable.ic_baseline_timer_grey_24);
-        tabLayout.getTabAt(3).setIcon(R.drawable.ic_baseline_history_24);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_baseline_history_24);
+        tabLayout.getTabAt(3).setIcon(R.drawable.ic_baseline_leaderboard_24);
     }
 
 

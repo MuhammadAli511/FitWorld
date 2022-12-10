@@ -8,7 +8,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.example.i190417_i190468_i190260.Fragments.ExercisesFragment;
 import com.example.i190417_i190468_i190260.Fragments.HistoryFragment;
-import com.example.i190417_i190468_i190260.Fragments.RemindersFragment;
+import com.example.i190417_i190468_i190260.Fragments.LeaderboardFragment;
 import com.example.i190417_i190468_i190260.Fragments.StatsFragment;
 
 
@@ -25,9 +25,9 @@ public class FragmentsAdapter extends FragmentPagerAdapter {
         } else if (position == 1) {
             return new ExercisesFragment();
         } else if (position == 2) {
-            return new RemindersFragment();
-        } else if (position == 3) {
             return new HistoryFragment();
+        } else if (position == 3) {
+            return new LeaderboardFragment();
         }
         return new StatsFragment();
     }
@@ -46,9 +46,9 @@ public class FragmentsAdapter extends FragmentPagerAdapter {
         } else if (position == 1) {
             title = "Exercises";
         } else if (position == 2) {
-            title = "Reminders";
-        } else if (position == 3) {
             title = "History";
+        } else if (position == 3) {
+            title = "Leaderboard";
         }
         return title;
     }
