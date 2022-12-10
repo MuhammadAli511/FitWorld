@@ -6,6 +6,15 @@ public class Users {
     String password;
     String deviceID;
 
+    public Users(){};
+
+    public Users(String name, String email, String password, String deviceID) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.deviceID = deviceID;
+    }
+
     public Users(String name, String email, String password) {
         this.name = name;
         this.email = email;

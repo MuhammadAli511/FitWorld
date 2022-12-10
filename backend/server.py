@@ -15,7 +15,7 @@ def postImage():
     image = request.form["image"]
 
     try:
-        connection = mysql.connector.connect(host='localhost', database='smd', user='root', password='root1234')
+        connection = mysql.connector.connect(host='localhost', database='smd', user='root', password='1234')
         cursor = connection.cursor()
         query = "INSERT INTO images (email, image) VALUES (%s, %s)"
         cursor.execute(query, (email, image))
@@ -34,7 +34,7 @@ def getImage():
     email = request.args.get("email")
 
     try:
-        connection = mysql.connector.connect(host='localhost', database='smd', user='root', password='root1234')
+        connection = mysql.connector.connect(host='localhost', database='smd', user='root', password='1234')
         cursor = connection.cursor()
         query = "SELECT image FROM images WHERE email = %s"
         cursor.execute(query, (email,))
