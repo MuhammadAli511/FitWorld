@@ -131,7 +131,10 @@ public class SignUp extends AppCompatActivity {
 
                 mAuth.createUserWithEmailAndPassword(email1, pass1).addOnCompleteListener(task -> {
                     if (task.isSuccessful()){
+                        String score = "0";
                         Users user = new Users(name1, email1, pass1);
+                        firebaseDatabase.getReference().child("Scores").child(mAuth.getCurrentUser().getUid()).child("Score").setValue(score);
+                        firebaseDatabase.getReference().child("Scores").child(mAuth.getCurrentUser().getUid()).child("Name").setValue(name1);
                         firebaseDatabase.getReference().child("Users").child(mAuth.getCurrentUser().getUid()).setValue(user);
                         OkHttpClient client = new OkHttpClient();
                         RequestBody body = new FormBody.Builder().add("email", email1).add("name", name1).add("image", image1).build();

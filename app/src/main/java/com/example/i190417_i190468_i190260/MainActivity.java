@@ -57,9 +57,15 @@ public class MainActivity extends AppCompatActivity {
                 String name = cursor.getString(cursor.getColumnIndexOrThrow(MyContract.Users._NAME));
                 Users tempUser = new Users(name, email, pass);
                 if (!usersList.contains(tempUser)){
-                    FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, pass);
-                    String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                    database.getReference().child("Users").child(userid).setValue(tempUser);
+                    FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, pass).addOnCompleteListener(task -> {
+                        if (task.isSuccessful()){
+                            String score = "0";
+                            String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                            database.getReference().child("Users").child(userid).setValue(tempUser);
+                            database.getReference().child("Scores").child(userid).child("Score").setValue(score);
+                            database.getReference().child("Scores").child(userid).child("Name").setValue(name);
+                        }
+                    });
                 }
                 localList.add(tempUser);
             }

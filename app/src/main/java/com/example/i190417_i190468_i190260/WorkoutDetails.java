@@ -98,6 +98,16 @@ public class WorkoutDetails extends AppCompatActivity {
                     String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
                     exercise.setTimestamp(date);
                     database.getReference().child("Workouts").child(userID).child(timestamp).setValue(exercise);
+                    database.getReference().child("Scores").child(userID).child("Score").get().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            String score = task.getResult().getValue().toString();
+                            int scoreInt = Integer.parseInt(score);
+                            scoreInt += 10;
+                            // convert to string
+                            String scoreStr = String.valueOf(scoreInt);
+                            database.getReference().child("Scores").child(userID).child("Score").setValue(scoreStr);
+                        }
+                    });
                 }
             }
         });
